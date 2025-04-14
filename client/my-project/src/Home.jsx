@@ -1,12 +1,14 @@
-import { useState } from 'react';
+import {useState} from 'react';
 
 function Home() {
     const [systemMessage, setSystemMessage] = useState('');
     const [humanMessage, setHumanMessage] = useState('');
     const [response, setResponse] = useState('');
+    const [loading, setLoading] = useState(false);
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+        setLoading(true);
 
         try {
             const res = await fetch('http://localhost:8000/question', {
@@ -22,9 +24,11 @@ function Home() {
 
             const data = await res.json();
             setResponse(data.answer);
+            setLoading(false);
         } catch (error) {
             console.error('Error:', error);
             setResponse('An error occurred while processing your request.');
+            setLoading(false);
         }
     };
 
@@ -57,7 +61,10 @@ function Home() {
                     </div>
                     <button
                         type="submit"
-                        className="w-full bg-blue-500 text-white font-medium py-2 rounded-md hover:bg-blue-600 transition"
+                        className={`w-full font-medium py-2 rounded-md transition ${
+                            loading ? 'bg-gray-400 text-gray-700 cursor-not-allowed' : 'bg-blue-500 text-white hover:bg-blue-600'
+                        }`}
+                        disabled={loading}
                     >
                         Send
                     </button>

@@ -18,22 +18,15 @@ app.get('/', (req, res) => {
 
 app.post('/question', async (req, res) => {
     const question = req.body.question;
+    const system = req.body.system;
     const messages = [
-        new SystemMessage("You are very smart"),
+        new SystemMessage(system),
         new HumanMessage(question)
     ]
     const chat = await model.invoke(messages);
     const cleanedAnswer = chat.content.replace(/\n/g, ' ');
     res.json({
         answer: cleanedAnswer
-    });
-});
-
-app.post('/joke', async (req, res) => {
-    const chat = await model.invoke("Can you tell me a joke?");
-    const cleanedJoke = chat.content.replace(/\n/g, ' ');
-    res.json({
-        joke: cleanedJoke
     });
 });
 

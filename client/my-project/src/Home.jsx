@@ -9,6 +9,7 @@ function Home() {
     const handleSubmit = async (e) => {
         e.preventDefault();
         setLoading(true);
+        setResponse('');
 
         try {
             const res = await fetch('http://localhost:8000/question', {
@@ -22,8 +23,20 @@ function Home() {
                 }),
             });
 
-            const data = await res.json();
-            setResponse(data.answer);
+            if (!res.body) throw new Error('ReadableStream not supported in response.');
+
+            const reader = res.body.getReader();
+            const decoder = new TextDecoder();
+            let result = '';
+
+            while (true) {
+                const { value, done } = await reader.read();
+                if (done) break;
+                const chunk = decoder.decode(value, { stream: true });
+                result += chunk;
+                setResponse(prev => prev + chunk);
+            }
+
             setLoading(false);
         } catch (error) {
             console.error('Error:', error);

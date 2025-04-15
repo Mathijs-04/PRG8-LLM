@@ -10,7 +10,7 @@ const model = new AzureChatOpenAI({temperature: 0.5});
 
 app.use(cors());
 app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
+app.use(express.urlencoded({extended: true}));
 
 app.get('/', (req, res) => {
     res.send('Hello, World!');
@@ -19,15 +19,26 @@ app.get('/', (req, res) => {
 app.post('/question', async (req, res) => {
     const question = req.body.question;
     const system = req.body.system;
-    const messages = [
-        new SystemMessage(system),
-        new HumanMessage(question)
-    ]
-    const chat = await model.invoke(messages);
-    const cleanedAnswer = chat.content.replace(/\n/g, ' ');
-    res.json({
-        answer: cleanedAnswer
-    });
+
+    try {
+        const messages = [
+            new SystemMessage(system),
+            new HumanMessage(question)
+        ];
+
+        const stream = await model.stream(messages);
+        res.setHeader("Content-Type", "text/plain");
+
+        for await (const chunk of stream) {
+            res.write(chunk.content);
+            await new Promise(resolve => setTimeout(resolve, 50));
+        }
+
+        res.end();
+    } catch (error) {
+        console.error("Error during streaming:", error);
+        res.status(500).send("An error occurred while streaming.");
+    }
 });
 
 app.listen(port, () => {

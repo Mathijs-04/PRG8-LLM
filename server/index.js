@@ -13,7 +13,7 @@ app.use(express.json());
 app.use(express.urlencoded({extended: true}));
 
 app.post('/question', async (req, res) => {
-    const {system, messages} = req.body;
+    const { system, messages } = req.body;
 
     try {
         const formattedMessages = [

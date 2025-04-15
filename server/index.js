@@ -1,7 +1,7 @@
 import express from 'express';
 import cors from 'cors';
 import {AzureChatOpenAI} from "@langchain/openai";
-import {HumanMessage, SystemMessage} from "@langchain/core/messages";
+import {HumanMessage, SystemMessage, AIMessage} from "@langchain/core/messages";
 
 const app = express();
 const port = 8000;
@@ -12,32 +12,31 @@ app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({extended: true}));
 
-app.get('/', (req, res) => {
-    res.send('Hello, World!');
-});
-
 app.post('/question', async (req, res) => {
-    const question = req.body.question;
-    const system = req.body.system;
+    const {system, messages} = req.body;
 
     try {
-        const messages = [
+        const formattedMessages = [
             new SystemMessage(system),
-            new HumanMessage(question)
+            ...messages.map((msg) =>
+                msg.role === 'human'
+                    ? new HumanMessage(msg.content)
+                    : new AIMessage(msg.content)
+            ),
         ];
 
-        const stream = await model.stream(messages);
-        res.setHeader("Content-Type", "text/plain");
+        const stream = await model.stream(formattedMessages);
+        res.setHeader('Content-Type', 'text/plain');
 
         for await (const chunk of stream) {
             res.write(chunk.content);
-            await new Promise(resolve => setTimeout(resolve, 50));
+            await new Promise((resolve) => setTimeout(resolve, 50));
         }
 
         res.end();
     } catch (error) {
-        console.error("Error during streaming:", error);
-        res.status(500).send("An error occurred while streaming.");
+        console.error('Error during streaming:', error);
+        res.status(500).send('An error occurred while streaming.');
     }
 });
 

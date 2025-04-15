@@ -1,15 +1,29 @@
-import {useState} from 'react';
+import { useState, useEffect } from 'react';
 
 function Home() {
     const [systemMessage, setSystemMessage] = useState('');
     const [humanMessage, setHumanMessage] = useState('');
     const [response, setResponse] = useState('');
     const [loading, setLoading] = useState(false);
+    const [messages, setMessages] = useState(() => {
+        const savedHistory = localStorage.getItem('myChatHistory');
+        return savedHistory ? JSON.parse(savedHistory) : [];
+    });
+
+    useEffect(() => {
+        localStorage.setItem('myChatHistory', JSON.stringify(messages));
+    }, [messages]);
 
     const handleSubmit = async (e) => {
         e.preventDefault();
         setLoading(true);
         setResponse('');
+
+        const updatedMessages = [
+            ...messages,
+            { role: 'human', content: humanMessage },
+        ];
+        setMessages(updatedMessages);
 
         try {
             const res = await fetch('http://localhost:8000/question', {
@@ -19,7 +33,7 @@ function Home() {
                 },
                 body: JSON.stringify({
                     system: systemMessage,
-                    question: humanMessage,
+                    messages: updatedMessages,
                 }),
             });
 
@@ -34,8 +48,13 @@ function Home() {
                 if (done) break;
                 const chunk = decoder.decode(value, { stream: true });
                 result += chunk;
-                setResponse(prev => prev + chunk);
+                setResponse((prev) => prev + chunk);
             }
+
+            setMessages((prev) => [
+                ...prev,
+                { role: 'assistant', content: result },
+            ]);
 
             setLoading(false);
         } catch (error) {

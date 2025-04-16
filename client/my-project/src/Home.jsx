@@ -1,7 +1,6 @@
 import { useState, useEffect } from 'react';
 
 function Home() {
-    const [systemMessage, setSystemMessage] = useState('');
     const [humanMessage, setHumanMessage] = useState('');
     const [response, setResponse] = useState('');
     const [loading, setLoading] = useState(false);
@@ -32,7 +31,6 @@ function Home() {
                     'Content-Type': 'application/json',
                 },
                 body: JSON.stringify({
-                    system: systemMessage,
                     messages: updatedMessages,
                 }),
             });
@@ -69,17 +67,6 @@ function Home() {
             <div className="bg-white shadow-md rounded-lg p-6 w-full max-w-md">
                 <h1 className="text-2xl font-bold text-gray-800 mb-4">Crack-GPT 3.5</h1>
                 <form onSubmit={handleSubmit} className="space-y-4">
-                    <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-1">
-                            System Message:
-                        </label>
-                        <textarea
-                            value={systemMessage}
-                            onChange={(e) => setSystemMessage(e.target.value)}
-                            rows="3"
-                            className="w-full border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                        />
-                    </div>
                     <div>
                         <label className="block text-sm font-medium text-gray-700 mb-1">
                             Human Message:

@@ -30,12 +30,21 @@ app.use(express.urlencoded({ extended: true }));
 // vectorStore = await FaissStore.fromDocuments(splitDocs, embeddings);
 // await vectorStore.save("./vectordatabase");
 
+app.post('/reset', (req, res) => {
+    try {
+        res.status(200).send('Conversation reset');
+    } catch (error) {
+        console.error('Error during reset:', error);
+        res.status(500).send('An error occurred while resetting.');
+    }
+});
+
 app.post('/question', async (req, res) => {
     try {
         vectorStore = await FaissStore.load("./vectordatabase", embeddings);
         const relevantDocs = await vectorStore.similaritySearch("Get your data from this source", 5);
         const context = relevantDocs.map(doc => doc.pageContent).join("\n\n");
-        const { system, messages } = req.body;
+        const { messages } = req.body;
 
         const systemMessage = `Only use information from the ${context} datasource, answer in English. Do not use answers which are not included in the datasource.`;
         const formattedMessages = [

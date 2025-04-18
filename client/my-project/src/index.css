@@ -1,3 +1,12 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@font-face {
+    font-family: 'FantasyFont';
+    src: url('/Fantasy-Font.otf') format('opentype');
+}
+
+.fantasy-title {
+    font-family: 'FantasyFont', sans-serif;
+}

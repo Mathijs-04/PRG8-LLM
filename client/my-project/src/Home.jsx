@@ -93,8 +93,8 @@ function Home() {
         <div className="flex flex-col h-screen bg-gray-900">
             <div className="bg-gray-900 p-4 border-b border-gray-700 sticky top-0 z-10 flex justify-between items-center">
                 <div className="text-center flex-1">
-                    <h1 className="text-3xl font-bold text-red-500">D&D-GPT</h1>
-                    <p className="text-gray-300 mt-2">Your AI Dungeon Master</p>
+                    <h1 className="fantasy-title text-5xl text-red-500">D&D-GPT</h1>
+                    <p className="fantasy-title text-2xl text-gray-300 mt-2">Your AI Dungeon Master</p>
                 </div>
                 <button
                     onClick={resetConversation}

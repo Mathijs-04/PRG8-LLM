@@ -4,7 +4,7 @@
 
 @font-face {
     font-family: 'FantasyFont';
-    src: url('/Fantasy-Font.otf') format('opentype');
+    src: url('/Fantasy-Font.ttf') format('truetype');
 }
 
 .fantasy-title {

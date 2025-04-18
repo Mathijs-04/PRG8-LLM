@@ -98,7 +98,7 @@ function Home() {
                 </div>
                 <button
                     onClick={resetConversation}
-                    className="bg-red-800 hover:bg-red-700 text-white px-4 py-2 rounded-lg transition-colors"
+                    className="fantasy-title text-xl bg-red-800 hover:bg-red-700 text-white px-4 py-2 rounded-lg transition-colors"
                 >
                     New Game
                 </button>
@@ -131,7 +131,7 @@ function Home() {
                         value={humanMessage}
                         onChange={(e) => setHumanMessage(e.target.value)}
                         placeholder="Type your message here..."
-                        className="flex-1 bg-gray-800 text-gray-100 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-red-500 text-base"
+                        className="fantasy-title text-xl flex-1 bg-gray-800 text-gray-100 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-red-500 text-base"
                         disabled={loading}
                         autoFocus
                     />
@@ -140,8 +140,8 @@ function Home() {
                         disabled={loading}
                         className={`px-6 py-2 rounded-lg font-medium ${
                             loading
-                                ? 'bg-gray-700 text-gray-400 cursor-not-allowed'
-                                : 'bg-red-600 text-white hover:bg-red-700'
+                                ? 'fantasy-title text-xl bg-gray-700 text-gray-400 cursor-not-allowed'
+                                : 'fantasy-title text-xl bg-red-600 text-white hover:bg-red-700'
                         } transition-colors`}
                     >
                         {loading ? (

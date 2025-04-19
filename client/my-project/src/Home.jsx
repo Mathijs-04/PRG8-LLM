@@ -118,12 +118,13 @@ function Home() {
     return (
         <div className="flex flex-col h-screen bg-gray-900">
             <div
-                className="bg-gray-900 p-4 border-b border-gray-700 sticky top-0 z-10 flex justify-between items-center">
-                <div className="text-center flex-1">
+                className="bg-gray-900 py-6 px-4 border-b border-gray-700 sticky top-0 z-10 flex justify-between items-center relative">
+                <div className="absolute left-1/2 transform -translate-x-1/2 text-center">
                     <h1 className="fantasy-title text-5xl text-red-500">D&D-GPT</h1>
                     <p className="fantasy-title text-2xl text-gray-300 mt-2">Your AI Dungeon Master</p>
                 </div>
-                <div className="flex gap-2">
+
+                <div className="flex gap-2 ml-auto">
                     <button
                         onClick={fetchRandomMonster}
                         className="fantasy-title text-xl bg-red-700 hover:bg-red-600 text-white px-4 py-2 rounded-lg transition-colors"
@@ -151,7 +152,8 @@ function Home() {
                             <ReactMarkdown
                                 remarkPlugins={[remarkGfm]}
                                 components={{
-                                    p: ({node, ...props}) => <p {...props} className="text-base whitespace-pre-wrap mb-2"/>,
+                                    p: ({node, ...props}) => <p {...props}
+                                                                className="text-base whitespace-pre-wrap mb-2"/>,
                                     strong: ({node, ...props}) => <strong {...props} className="text-red-400"/>,
                                     ul: ({node, ...props}) => <ul {...props} className="list-disc pl-6 mb-4"/>,
                                     li: ({node, ...props}) => <li {...props} className="mb-1"/>
